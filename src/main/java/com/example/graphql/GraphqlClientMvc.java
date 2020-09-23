@@ -12,12 +12,12 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
-public class GraphqlClient {
-    private final Logger logger = LoggerFactory.getLogger(GraphqlClient.class);
+public class GraphqlClientMvc {
+    private final Logger logger = LoggerFactory.getLogger(GraphqlClientMvc.class);
 
     private final RestTemplate restTemplate;
 
-    public GraphqlClient(RestTemplate restTemplate) {
+    public GraphqlClientMvc(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
