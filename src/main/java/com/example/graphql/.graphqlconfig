@@ -1,0 +1,15 @@
+{
+  "name": "Apollo GraphQL Schema",
+  "schemaPath": "schema.json",
+  "extensions": {
+    "endpoints": {
+      "Apollo GraphQL Endpoint": {
+        "url": "https://apollo-fullstack-tutorial.herokuapp.com/",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": true
+      }
+    }
+  }
+}
