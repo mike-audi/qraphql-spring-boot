@@ -2,29 +2,30 @@ package com.example.graphql;
 
 import com.apollographql.apollo.api.Operation;
 import com.apollographql.apollo.api.ScalarTypeAdapters;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import okio.ByteString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.Objects;
-import java.util.function.Function;
 
 public class GraphqlClientWebFlux {
     private final Logger logger = LoggerFactory.getLogger(GraphqlClientMvc.class);
 
     private final WebClient webClient;
+    private final ObjectMapper objectMapper;
 
-    public GraphqlClientWebFlux(WebClient webClient) {
+    public GraphqlClientWebFlux(WebClient webClient, ObjectMapper objectMapper) {
         this.webClient = webClient;
+        this.objectMapper = objectMapper;
     }
 
     public <D extends Operation.Data, T, V extends Operation.Variables> Mono<Mono<T>> exchange(
             Operation<D, T, V> operation) throws IOException {
-       return exchange(new GraphqlRequestBody(operation))
+       return exchange(GraphqlRequestBody.to(operation, objectMapper))
                .map(m -> m
                        .map(ThrowingFunctionWrapper.wrap(bytes ->
                                bytes == null ? null : operation
@@ -35,7 +36,7 @@ public class GraphqlClientWebFlux {
     public <D extends Operation.Data, T, V extends Operation.Variables> Mono<Mono<T>> exchange(
             Operation<D, T, V> operation,
             ScalarTypeAdapters scalarTypeAdapters) throws IOException {
-        return exchange(new GraphqlRequestBody(operation))
+        return exchange(GraphqlRequestBody.to(operation, scalarTypeAdapters, objectMapper))
                 .map(m -> m
                         .map(ThrowingFunctionWrapper.wrap(bytes ->
                                 bytes == null ? null : operation

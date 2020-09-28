@@ -1,6 +1,7 @@
 package com.example.graphql;
 
 import com.example.graphql.client.LaunchListQuery;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -19,7 +20,8 @@ public class GraphqlClientIntgTests {
         GraphqlClientMvc client = new GraphqlClientMvc(
                 new RestTemplateBuilder()
                         .rootUri(APOLLO_SAMPLE_URI)
-                        .build());
+                        .build(),
+                new ObjectMapper());
 
         Optional<LaunchListQuery.Data> rsp = client.exchange(new LaunchListQuery());
         Assert.assertTrue(rsp.isPresent());
@@ -32,7 +34,8 @@ public class GraphqlClientIntgTests {
         GraphqlClientWebFlux client = new GraphqlClientWebFlux(
                 WebClient.builder()
                         .baseUrl(APOLLO_SAMPLE_URI)
-                        .build());
+                        .build(),
+                new ObjectMapper());
         Optional<LaunchListQuery.Data> rsp = client
                 .exchange(new LaunchListQuery())
                 .block()
